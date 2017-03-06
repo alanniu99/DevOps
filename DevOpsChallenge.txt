@@ -1,0 +1,84 @@
+Q1) What initiatives would you take to speed up the test execution time?
+1.Tag the unit cases, e.g. smoke, regression or by priority . High priority cases passed then promote to next phases.
+2.Run Jenkins master/slave in containers. Scaling the master when mass jobs triggered. Run UT cases in transience docker. 
+3.Optimise cases, use mock test cases for high load resources.
+
+Q2) It is now a problem for engineers and the business to know what versions of the
+components that was released when in each environment. How would you solve that?
+1.Central artifact repository management with nexus,docker hub..
+2.Add version in metadata file.
+3.Setup CI/CD pipeline and display the version in pipeline
+4.Create version monitor script to display version in environments
+
+Q3) They also lack visibility into when critical features was released in the past per environment,
+perhaps it was a few releases ago. How would you solve that?
+1.Use JIRA features ability to track the features lifecycle.
+2.Branch the code repository by features. Use the Month/Year as the version num. e.g. product17
+3.Auto post  released report after new features released.
+
+Q4) Sales and some customers require change logs for breaking changes in production. how
+would you facilitate that?
+1.DevOps changes are smaller and low risk then ITIL CM. Cloud use IBM pronto track the changes. 
+HP ALM also can generate changes report. JIRA ticket can track the changes details logs.
+
+Q5) What Initiatives would you take to increase the stability of the whole test suite?
+1.Optimise the selenium restrict the run time, add smoke , regression tag. abstract common function library.
+2.use load balance reduce single app down affect.
+3.Dockerlize the application reduce the running environment issues.
+3.If apps are microservices , can use Mesos/marathon or Kubernetes to manage the apps.
+Scaling the bottm applications as RPS or resources utilities.
+
+Q6) What initiatives would you take to limit the number of tests without compromising on the
+quality controls they provide?
+1. First run somke cases , smoke cases passed as expected rate then run regression cases. 
+2. Redue repeted cases(base function cases) in  transaction case. e.g. repeted login steps.
+
+Q7) What would you do to make this situation better?
+1.Authorization to related colleague in SCM.remove the commit permission not in the team.
+2.Set read,build,delete ...permission in Jenkins matrix-security management page.
+3.Group the Jobs and grant access permisson to related people.
+
+Q8) How would you measure the overall stability of the build pipeline, given that there is a
+difference between a failed build due to test failures and systemic instabilities?
+1.Post the test report to http server or email to triggers in jenkins job. The report
+can display the status. 
+2.use the spcific tools to measure the piple e.g. buildkit
+
+Q9) How would you measure the end to end release time for a one example line test in a library
+all the way to the production release in a systematic way, so we could know if we are improving
+or doing worse?
+1. Default there will be display the sum release time in pipleline from jenkins2.7.
+
+Q10) How would you measure the process performance, if you include mandatory code reviews
+and other stop gates. 
+1.In Agile scrum framework could use Kanban to track the progress.
+
+Q11) How would you implement such a setup?
+1 x Empty postgresql database (the component needs this)
+1 x Empty elasticsearch database (the component needs this)
+1 x Empty redis cache (the component needs this for distributed cache)
+Consider run postgrpesql,edocker,redis in docker. Expose the connection port.
+1 x Loadbalancer
+Nginx or HAProxy 
+1 x API client for the test client
+2 x the component (same version, the version we want to test)
+
+Q12) Where would you cut off and say ¡°now we have enough automation¡± at the package
+install, initial configuration with ldap integration, plugin configuration, or even automate the build
+job creation ?
+1.Jenkins have simple CLI to get job or paste job. or back jenkins home then restore. 
+Mount NFS and store jenkins_home to global file system or choose aws S3(through lost data recently, But can choose better store with DR),EMC store,azure storage...
+2.Seperately the jenkins Data, Jenkins Master, Jenkins Slave to docker container. Jenkins master easy to restart ,scaling.
+Jenkins data container volume use exteral storage.
+3.Use jenkins DSL and store in code repository to automate build job.
+
+Q13) How would you make sure that we can reliably backup and restore a jenkins server, when
+everyone can change the builds?
+1.Set auto trigger backup when build changed. Use Green-blue way to restore jenkins server
+to new server startup and running well then destroy the old one.
+2.Only have enough permisson colleague allow to change builds.
+
+Q14) Do you have any suggestions for alternative build systems that Full Moon Software could
+use, assuming that they cannot use 3rd party SaaS build services but need to manage their
+own?
+1.Jenkins(or plugin) can do everthing. Maven better in Dependency management. If choose microservices can build app to docker image.
